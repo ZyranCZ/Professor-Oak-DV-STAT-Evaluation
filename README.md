@@ -1,1 +1,96 @@
+# Professor Oak's Pokémon Appraisal
 
+A small Gen1Recomp mod that lets **Professor Oak appraise your Pokémon**, using the real hidden stat systems from Pokémon Red/Blue.
+
+Oak can appraise Pokémon through:
+
+- **Professor Oak's PC**
+- **Professor Oak himself in his laboratory**
+
+The menu offers:
+
+```text
+SHOW POKéMON
+SHOW POKéDEX
+CANCEL
+```
+
+`SHOW POKéDEX` keeps the original Red/Blue Pokédex evaluation.
+
+`SHOW POKéMON` lets you choose a Pokémon from your current party and evaluates two separate things:
+
+- **DVs** — its natural potential
+- **Stat Experience** — how much it has been trained
+
+## What are DVs?
+
+**DVs (Determinant Values)** are the Generation I predecessor of modern **IVs (Individual Values)**.
+
+Attack, Defense, Speed and Special each have a hidden DV from **0–15**, for a maximum total of **60**.
+
+DVs are determined when a Pokémon is obtained and **cannot be improved through training**.
+
+In simple terms:
+
+**DVs = natural talent**
+
+| Total DVs | Oak's appraisal |
+|---:|---|
+| **50–60** | `Your <PK><MN>'s DVs are outstanding!` / `Its potential is remarkable!` |
+| **40–49** | `Your <PK><MN>'s DVs are very good.` / `Its potential is above average.` |
+| **31–39** | `Your <PK><MN>'s DVs are fairly ordinary.` / `Its natural potential is decent.` |
+| **0–30** | `Your <PK><MN>'s DVs are rather low.` / `Its natural potential is limited.` |
+
+## What is Stat Experience?
+
+**Stat Experience** is the Generation I predecessor of modern **EVs (Effort Values)**.
+
+Pokémon gain separate Stat Experience for:
+
+- HP
+- Attack
+- Defense
+- Speed
+- Special
+
+Unlike DVs, Stat Experience **increases through battling**.
+
+The mod evaluates the effective stat growth produced by Stat Experience. Each stat can contribute up to 63 effective training points, for a total maximum of **315**.
+
+In simple terms:
+
+**Stat Experience = training**
+
+| Training | Oak's appraisal |
+|---:|---|
+| **315 / 315** | `Its stats are fully developed!` / `It reached its full potential!` |
+| **221–314** | `Its stats are remarkably high!` / `It's very near its full potential.` |
+| **127–220** | `Its stats show lots of training.` / `It still has room to grow!` |
+| **64–126** | `Its stats are growing nicely.` / `It still needs lots of training.` |
+| **0–63** | `Its stats are still quite low.` / `You two are just getting started!` |
+
+## DVs vs. Training
+
+The two systems are independent.
+
+A Pokémon can have excellent DVs but little training, poor DVs but maximum training, or anything in between.
+
+Its **level is separate from both**.
+
+> **DVs = talent**  
+> **Stat Experience = training**
+
+## Notes
+
+- The mod does not change DVs, Stat Experience, leveling or battle mechanics.
+- It only exposes information that already exists internally.
+- Appraisal dialogue is split into short Game Boy-style messages, with each box requiring its own button press.
+- The original Red/Blue `<PK><MN>` glyphs are used in appraisal text to keep the layout consistent for every Pokémon.
+
+## Compatibility
+
+Built for **Gen1Recomp v0.1.75**.
+
+## Version
+
+**1.0.0**
