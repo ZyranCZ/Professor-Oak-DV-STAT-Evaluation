@@ -14,6 +14,7 @@ SHOW POKéMON
 SHOW POKéDEX
 CANCEL
 ```
+<img width="931" height="888" alt="image" src="https://github.com/user-attachments/assets/a548e886-a478-4d78-a497-a1d564d9519a" />
 
 `SHOW POKéDEX` keeps the original Red/Blue Pokédex evaluation.
 
@@ -40,6 +41,7 @@ In simple terms:
 | **40–49** | `Your <PK><MN>'s DVs are very good.` / `Its potential is above average.` |
 | **31–39** | `Your <PK><MN>'s DVs are fairly ordinary.` / `Its natural potential is decent.` |
 | **0–30** | `Your <PK><MN>'s DVs are rather low.` / `Its natural potential is limited.` |
+<img width="931" height="888" alt="image" src="https://github.com/user-attachments/assets/4181c8fe-fbfe-429b-9c1b-12c90fde5e48" />
 
 ## What is Stat Experience?
 
@@ -68,6 +70,7 @@ In simple terms:
 | **127–220** | `Its stats show lots of training.` / `It still has room to grow!` |
 | **64–126** | `Its stats are growing nicely.` / `It still needs lots of training.` |
 | **0–63** | `Its stats are still quite low.` / `You two are just getting started!` |
+<img width="931" height="888" alt="image" src="https://github.com/user-attachments/assets/95ac729d-e74c-4bdf-8034-fbd6d107a475" />
 
 ## DVs vs. Training
 
