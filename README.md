@@ -1,4 +1,4 @@
-<img width="931" height="888" alt="image" src="https://github.com/user-attachments/assets/9928bf37-7ca4-460d-b369-fe2d33725048" /># Professor Oak's Pokémon Appraisal
+# Professor Oak's Pokémon Appraisal
 
 A small Gen1Recomp mod that lets **Professor Oak appraise your Pokémon**, using the real hidden stat systems from Pokémon Red/Blue.
 
