@@ -1,0 +1,16 @@
+{
+  "id": "oak_pokemon_appraisal",
+  "name": "Professor Oak's Pokemon Appraisal",
+  "version": "1.0.1",
+  "github": "ZyranCZ/Professor-Oak-DV-STAT-Evaluation",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "TOOL",
+  "game_version": ">=0.1.75 <0.1.76",
+  "priority": 100,
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Adds Gen I DV and Stat Experience appraisal to Professor Oak's PC and Oak himself in the lab."
+}

@@ -1,115 +1,105 @@
-# Professor Oak's Pokémon Appraisal
+# Professor Oak's Pokemon Appraisal
 
-A small Gen1Recomp mod that lets **Professor Oak appraise your Pokémon**, using the real hidden stat systems from Pokémon Red/Blue.
+**v1.0.1** for **Gen1Recomp v0.1.75** (`60cf07fb0a1ffce0ec6d5d0d2f78a921a6d0b7da`).
 
-Oak can appraise Pokémon through:
+Adds a Pokemon appraisal service to **PROF.OAK's PC** in Pokemon Centers and to **Professor Oak himself in his lab**, while preserving the existing Pokedex rating.
 
-- **Professor Oak's PC**
-- **Professor Oak himself in his laboratory**
+## In game
 
-The menu offers:
+Open a Pokemon Center PC and choose **PROF.OAK's PC**. Oak's entry now offers, with the Pokemon appraisal deliberately placed first:
 
-```text
-SHOW POKéMON
-SHOW POKéDEX
-CANCEL
-```
-<img width="931" height="888" alt="image" src="https://github.com/user-attachments/assets/a548e886-a478-4d78-a497-a1d564d9519a" />
+- **SHOW POKéMON** — immediately opens the normal party screen and lets you choose one Pokemon for appraisal.
+- **SHOW POKéDEX** — runs Gen1Recomp's existing vanilla Pokedex-rating callback.
+- **CANCEL** — returns to the previous menu/dialogue.
 
+The same **SHOW POKéMON / SHOW POKéDEX / CANCEL** menu is used when speaking directly to Professor Oak in his lab once his normal dialogue reaches the Pokédex-rating phase. A direct Pokémon appraisal returns to the lab instead of showing the PC link-closing message.
 
-**Check out my other mods:**<br>
-* [Autofire A/B + Directional Keys Mod](https://github.com/ZyranCZ/autofire)<br>
-* [Steel and/or Fairy and/or Typing Charts](https://github.com/ZyranCZ/Steel-and-or-Fairy-and-or-Typing-Charts)<br>
-* [Move Category (PHYS/SPEC) Preview](https://github.com/ZyranCZ/Move-Category-Preview)<br>
-* [Special Stat Split
-](https://github.com/ZyranCZ/Special-Stat-Split/)<br>
-* [Enemy HP Visible](https://github.com/ZyranCZ/Enemy-HP)
-* [Can Always Escape](https://github.com/ZyranCZ/Can-Always-Escape)
-* [Trainers Let You Choose Lead Pokemon](https://github.com/ZyranCZ/Trainers-Let-You-Choose-Lead-Pokemon)
-* [Evolve in Battle](https://github.com/ZyranCZ/Evolve-in-Battle)
-* [HELP Story Guide](https://github.com/ZyranCZ/HELP-Story-Guide/)
-* [Professor Oak's Pokémon DV/Stat Appraisal](https://github.com/ZyranCZ/Professor-Oak-DV-STAT-Evaluation)
+There is no terminology tutorial or first-use explanation. Choosing **SHOW POKéMON** always goes straight to the party picker. After selecting a party member, one short speaker-introduction box is shown:
 
+`OAK: Let's see...`
+`<selected Pokemon name>!`
 
+This is the only appraisal-related box that uses `OAK:` or the Pokemon's variable name/nickname. The actual evaluation then uses fixed text.
 
-`SHOW POKéDEX` keeps the original Red/Blue Pokédex evaluation.
+The appraisal is split into short, separate dialogue boxes. The four semantic parts are still:
 
-`SHOW POKéMON` lets you choose a Pokémon from your current party and evaluates two separate things:
+1. DV verdict.
+2. Natural-potential verdict.
+3. Training/stat verdict based on Stat Experience.
+4. Remaining-training/potential verdict.
 
-- **DVs** — its natural potential
-- **Stat Experience** — how much it has been trained
+However, a semantic part may now occupy more than one physical dialogue box when that is needed for clean layout. Each physical box contains at most **two visible text lines** and requires its own fresh A/B press.
 
-## What are DVs?
+The actual appraisal verdicts do **not** repeat `OAK:`. Every DV verdict begins **`Your <PK><MN>'s DVs are ...`** and uses the fixed Gen I **`<PK><MN>'s`** glyph pair instead of repeating the selected species name or nickname. This keeps the evaluation layout deterministic after the one immersive intro box. `<PK>` and `<MN>` are the game's native one-tile charmap glyphs; `<PK><MN>'s` is treated as one atomic word and is never hyphenated or split across rows.
 
-**DVs (Determinant Values)** are the Generation I predecessor of modern **IVs (Individual Values)**.
+Appraisal text uses its own 18-column layout pass before the normal TextBox renderer. When a curated long word would otherwise waste the end of a row, the mod may hyphenate it. For example, `potential` can be rendered as `poten-` / `tial`. The resulting lines are then grouped two at a time into separate TextBoxes.
 
-Attack, Defense, Speed and Special each have a hidden DV from **0–15**, for a maximum total of **60**.
+A press used to choose a menu option, select a Pokemon, or dismiss the previous box cannot spill into the next box.
 
-DVs are determined when a Pokémon is obtained and **cannot be improved through training**.
+## DV appraisal
 
-In simple terms:
+The appraisal uses the four independently stored Gen I DVs: Attack, Defense, Speed and Special. Each is 0–15, so the maximum sum is **60**. HP DV is derived from those four and is not counted a second time.
 
-**DVs = natural talent**
-
-| Total DVs | Oak's appraisal |
+| DV sum | Appraisal tier |
 |---:|---|
-| **50–60** | `Your <PK><MN>'s DVs are outstanding!` / `Its potential is remarkable!` |
-| **40–49** | `Your <PK><MN>'s DVs are very good.` / `Its potential is above average.` |
-| **31–39** | `Your <PK><MN>'s DVs are fairly ordinary.` / `Its natural potential is decent.` |
-| **0–30** | `Your <PK><MN>'s DVs are rather low.` / `Its natural potential is limited.` |
-<img width="931" height="888" alt="image" src="https://github.com/user-attachments/assets/4181c8fe-fbfe-429b-9c1b-12c90fde5e48" />
+| 50–60 | Outstanding |
+| 40–49 | Above average |
+| 31–39 | Fairly ordinary |
+| 0–30 | Limited |
 
-## What is Stat Experience?
+## Training appraisal
 
-**Stat Experience** is the Generation I predecessor of modern **EVs (Effort Values)**.
+The mod evaluates all five Gen I Stat Experience buckets: HP, Attack, Defense, Speed and Special.
 
-Pokémon gain separate Stat Experience for:
+It measures **effective stat contribution**, not raw `statExp / 65535`. Gen1Recomp's Gen I formula converts each Stat Experience value to:
 
-- HP
-- Attack
-- Defense
-- Speed
-- Special
+`floor(min(255, ceil(sqrt(statExp))) / 4)`
 
-Unlike DVs, Stat Experience **increases through battling**.
+That produces **0–63 effective training points per stat**, or **0–315 total**. A 100% appraisal therefore means further Stat Experience can no longer increase any stat through the Gen I Stat Experience term.
 
-The mod evaluates the effective stat growth produced by Stat Experience. Each stat can contribute up to 63 effective training points, for a total maximum of **315**.
-
-In simple terms:
-
-**Stat Experience = training**
-
-| Training | Oak's appraisal |
+| Effective training | Appraisal tier |
 |---:|---|
-| **315 / 315** | `Its stats are fully developed!` / `It reached its full potential!` |
-| **221–314** | `Its stats are remarkably high!` / `It's very near its full potential.` |
-| **127–220** | `Its stats show lots of training.` / `It still has room to grow!` |
-| **64–126** | `Its stats are growing nicely.` / `It still needs lots of training.` |
-| **0–63** | `Its stats are still quite low.` / `You two are just getting started!` |
-<img width="931" height="888" alt="image" src="https://github.com/user-attachments/assets/95ac729d-e74c-4bdf-8034-fbd6d107a475" />
+| 0–20% | Just getting started |
+| >20–40% | Developing |
+| >40–70% | Well trained |
+| >70–<100% | Nearly complete |
+| 100% | Full training potential |
 
-## DVs vs. Training
 
-The two systems are independent.
+## Appraisal copy
 
-A Pokémon can have excellent DVs but little training, poor DVs but maximum training, or anything in between.
+After the one `OAK: Let's see... / <name>!` intro, the current fixed verdict copy is:
 
-Its **level is separate from both**.
+### DV verdicts
 
-> **DVs = talent**  
-> **Stat Experience = training**
+| DV sum | DV verdict | Potential verdict |
+|---:|---|---|
+| 50–60 | `Your <PK><MN>'s DVs are outstanding!` | `Its potential is remarkable!` |
+| 40–49 | `Your <PK><MN>'s DVs are very good.` | `Its potential is above average.` |
+| 31–39 | `Your <PK><MN>'s DVs are fairly ordinary.` | `Its natural potential is decent.` |
+| 0–30 | `Your <PK><MN>'s DVs are rather low.` | `Its natural potential is limited.` |
 
-## Notes
+### Training verdicts
 
-- The mod does not change DVs, Stat Experience, leveling or battle mechanics.
-- It only exposes information that already exists internally.
-- Appraisal dialogue is split into short Game Boy-style messages, with each box requiring its own button press.
-- The original Red/Blue `<PK><MN>` glyphs are used in appraisal text to keep the layout consistent for every Pokémon.
+| Effective training | Stat/training verdict | Potential verdict |
+|---:|---|---|
+| 100% | `Its stats are fully developed!` | `It reached its full potential!` |
+| >70–<100% | `Its stats are remarkably high!` | `It's very near its full potential.` |
+| >40–70% | `Its stats show lots of training.` | `It still has room to grow!` |
+| >20–40% | `Its stats are growing nicely.` | `It still needs lots of training.` |
+| 0–20% | `Its stats are still quite low.` | `You two are just getting started!` |
 
-## Compatibility
+The visible wording says **stats/training** for readability, but these five tiers are still calculated exclusively from Gen I **Stat Experience**, not level EXP.
 
-Built for **Gen1Recomp v0.1.75**.
+## Compatibility approach
 
-## Version
+- Uses the official `ui.pc.items` hook rather than patching PC tile logic or replacing `OverworldState` methods.
+- Calls `next()` first and decorates only the `PROF.OAK's PC` descriptor.
+- Preserves the original Oak callback for **SHOW POKéDEX**.
+- Uses the public `mod.ui` facade for Menu, TextBox and PartyMenu.
+- Does not change Pokemon data, DVs, Stat Experience, stats, save schema or battle mechanics.
+- Compatible by design with Special Stat Split because Gen I still has one shared Special DV and one shared Special Stat Experience bucket.
 
-**1.0.0**
+## Current scope
+
+The release evaluates Pokemon currently in the **party**. Direct selection of Pokemon stored inside boxes is outside the current scope.

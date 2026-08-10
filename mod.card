@@ -1,0 +1,25 @@
+return {
+  summary = "Professor Oak evaluates a party Pokemon's Gen I DVs and Stat Experience from his PC link or in person at his lab.",
+  author = "ZyranCZ",
+  tags = { "ui", "tool", "quality-of-life", "pokemon", "appraisal" },
+  differences = {
+    changed = {
+      "PROF.OAK's PC and the in-person Oak Pokédex-rating interaction offer SHOW POKéMON / SHOW POKéDEX / CANCEL, with Pokémon first",
+    },
+    added = {
+      "party Pokemon appraisal using immutable Attack/Defense/Speed/Special DVs",
+      "training appraisal using the effective Gen I Stat Experience contribution for HP/Attack/Defense/Speed/Special",
+      "one short OAK/name intro after party selection, followed by deterministic appraisal copy",
+      "dynamic two-line appraisal dialogue boxes with word-aware wrapping, optional hyphenation and one fresh A/B press per box",
+      "in-person Oak appraisal that preserves his earlier story dialogue and returns directly to the lab",
+    },
+    known = {
+      "v1.0.1 appraises party Pokemon only; boxed Pokemon are not selectable from Oak's appraisal",
+    },
+  },
+  credits = {
+    { who = "bryanthaboi/gen1recomp", for_ = "the native mod API, PC menu hook and Gen I stat implementation" },
+    { who = "pret/pokered", for_ = "Gen I behavior reference" },
+  },
+  compat = { engine = ">=0.1.75 <0.1.76", modApi = 2 },
+}
