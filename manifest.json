@@ -1,16 +1,20 @@
 {
   "id": "oak_pokemon_appraisal",
   "name": "Professor Oak's Pokemon Appraisal",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "github": "ZyranCZ/Professor-Oak-DV-STAT-Evaluation",
   "api": 2,
+  "games": [
+    "gen1",
+    "gold"
+  ],
   "entry": "main.lua",
   "profile": "content",
   "category": "TOOL",
-  "game_version": ">=0.1.75 <0.1.76",
   "priority": 100,
   "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],
-  "description": "Adds Gen I DV and Stat Experience appraisal to Professor Oak's PC and Oak himself in the lab."
+  "description": "Adds party Pokemon DV and Stat Experience appraisal to Professor Oak in Gen I and to Oak's PC, Professor Elm, and Goldenrod's Happiness Rater in Pokemon Gold.",
+  "experimental": false
 }

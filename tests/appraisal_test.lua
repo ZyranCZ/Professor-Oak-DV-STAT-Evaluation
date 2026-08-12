@@ -3,6 +3,7 @@ local entry = assert(loadfile(root .. "/../main.lua"))()
 
 local capturedHook
 local capturedDexCommand
+local capturedGameReady
 local vanillaDexCalls = 0
 local vanillaDexCommand = function()
   vanillaDexCalls = vanillaDexCalls + 1
@@ -23,7 +24,12 @@ local fakeMod = {
       end,
     },
   },
-  hooks = { wrap = function(_, name, fn) if name == "ui.pc.items" then capturedHook = fn end end },
+  hooks = { wrap = function(_, name, fn)
+    if name == "ui.pc.items" then capturedHook = fn end
+  end },
+  events = { on = function(_, name, fn)
+    if name == "game.ready" then capturedGameReady = fn end
+  end },
   ui = {},
   save = {
     get = function(_, k, d) local v = store[k]; if v == nil then return d end; return v end,
@@ -32,9 +38,12 @@ local fakeMod = {
   exports = {},
 }
 entry(fakeMod)
+assert(capturedGameReady, "game.ready listener was not registered")
+-- Gen 1 integration is deliberately deferred until the live generation is known.
+capturedGameReady({ game = { data = {} } })
 assert(capturedHook, "ui.pc.items hook was not registered")
 assert(capturedDexCommand, "dex_rating command override was not registered")
-assert(fakeMod.exports.version == "1.0.1")
+assert(fakeMod.exports.version == "2.0.0")
 
 -- Any dex_rating command outside Oak's Lab is delegated untouched.
 capturedDexCommand({ overworld = { map = { id = "OTHER_MAP" } } })
@@ -412,4 +421,4 @@ assert(returnedDirectMenu.items[3].label == "CANCEL")
 returnedDirectMenu.items[3].onSelect()
 assert(coroutine.status(directCo) == "dead")
 
-print("oak_pokemon_appraisal 1.0.1: final menu ordering, appraisal layout, scoring, PC flow and in-person Oak dex-rating interception tests passed")
+print("oak_pokemon_appraisal 2.0.0: final menu ordering, appraisal layout, scoring, PC flow and in-person Oak dex-rating interception tests passed")

@@ -1,25 +1,28 @@
 return {
-  summary = "Professor Oak evaluates a party Pokemon's Gen I DVs and Stat Experience from his PC link or in person at his lab.",
+  summary = "Appraises party Pokemon DVs and Stat Experience through Oak in Gen I, plus Oak's PC, Professor Elm and Goldenrod's Happiness Rater in Pokemon Gold.",
   author = "ZyranCZ",
-  tags = { "ui", "tool", "quality-of-life", "pokemon", "appraisal" },
+  tags = { "ui", "tool", "quality-of-life", "pokemon", "appraisal", "gold" },
   differences = {
     changed = {
-      "PROF.OAK's PC and the in-person Oak Pokédex-rating interaction offer SHOW POKéMON / SHOW POKéDEX / CANCEL, with Pokémon first",
+      "PROF.OAK's PC offers SHOW POKéMON / SHOW POKéDEX / CANCEL when the native Oak entry is available",
+      "Goldenrod's Happiness Rater offers CHECK HAPPINESS / APPRAISE / CANCEL in Pokemon Gold",
+      "Professor Elm offers APPRAISE / CANCEL only after his complete native conversation finishes",
     },
     added = {
-      "party Pokemon appraisal using immutable Attack/Defense/Speed/Special DVs",
-      "training appraisal using the effective Gen I Stat Experience contribution for HP/Attack/Defense/Speed/Special",
-      "one short OAK/name intro after party selection, followed by deterministic appraisal copy",
-      "dynamic two-line appraisal dialogue boxes with word-aware wrapping, optional hyphenation and one fresh A/B press per box",
-      "in-person Oak appraisal that preserves his earlier story dialogue and returns directly to the lab",
+      "Gold party Pokemon appraisal using four stored DVs and five Stat Experience buckets",
+      "Egg-safe appraisal refusal without hidden species or score leakage",
+      "generation-specific PC and personal-appraisal orchestration with shared verdict/layout core",
+      "observed post-dialogue Professor Elm integration: vanilla faceplayer arms appraisal, script.ended opens it only after completion",
+      "fresh-press protected appraisal dialogue in both supported generations",
     },
     known = {
-      "v1.0.1 appraises party Pokemon only; boxed Pokemon are not selectable from Oak's appraisal",
+      "v2.0.0 appraises party Pokemon only; boxed Pokemon are not directly selectable",
     },
   },
   credits = {
-    { who = "bryanthaboi/gen1recomp", for_ = "the native mod API, PC menu hook and Gen I stat implementation" },
+    { who = "bryanthaboi/gen1recomp", for_ = "the native Mod API, Gen I integration seams and Pokemon Gold implementation" },
     { who = "pret/pokered", for_ = "Gen I behavior reference" },
+    { who = "pret/pokegold", for_ = "Pokemon Gold Happiness Rater and map/script behavior reference" },
   },
-  compat = { engine = ">=0.1.75 <0.1.76", modApi = 2 },
+  compat = { modApi = 2, games = { "gen1", "gold" } },
 }

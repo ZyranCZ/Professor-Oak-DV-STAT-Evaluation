@@ -1,5 +1,130 @@
 # Changelog
 
+## 2.0.0
+
+### Stable Gen 2 release
+- Promoted the tested `1.1.0-rc.5` runtime unchanged to stable **2.0.0**.
+- Added Pokémon Gold support while preserving Red / Blue / Yellow behavior.
+- Gold appraisal is available through native **PROF.OAK's PC**, Goldenrod's Happiness Rater, and Professor Elm after Elm's complete native dialogue finishes.
+- Preserves native Oak Pokédex rating and native Happiness Rater behavior.
+- Keeps Egg appraisal opaque and read-only.
+- Retains four stored DV / five Stat Experience scoring semantics in Gold, with shared Special counted once.
+- Keeps `experimental: false` and intentionally has no `game_version` compatibility gate.
+
+### Verification
+- Gen I regression suite: PASS.
+- Gold expanded headless suite: PASS.
+- RC.5 live Gold behavior was reported to function correctly and is the exact runtime promoted here.
+- Broader cross-mod smoke testing remains recommended after future upstream or dependency changes.
+
+## 1.1.0-rc.5
+
+### Validation / hardening
+- Kept the RC.4 Professor Elm runtime mechanism unchanged; RC.5 adds no new Elm interception behavior before the next bundled live test.
+- Expanded Gold headless scoring coverage to prove that held items, happiness, gender, shiny state, Pokérus, Unown/form-style metadata, records and separate Sp. Atk / Sp. Def convenience fields do not become appraisal score buckets.
+- Expanded selected-Pokémon read-only coverage to include party identity/order, moves, OT, gender, shiny state, Pokérus and record metadata.
+- Added fainted / statused / level-100 appraisal coverage.
+- Added transparent **CHECK HAPPINESS** delegation tests for all six native happiness tiers and first-non-Egg behavior.
+- Added stronger fresh-press coverage using intermittent held-A/autofire-style input; three consecutive neutral frames remain required before a new appraisal TextBox receives input.
+- Added repeated `game.ready` installation checks and retained per-instance Center PC wrapper idempotence coverage.
+
+### Compatibility status
+- Gen I regression suite: PASS.
+- Gold headless suite: PASS.
+- The current upstream Gen 2 compatibility documentation explicitly lists `script.started`, `script.ended`, and `script.command` as the supported Gold scripting seams used by this candidate.
+- Official `gen2check --strict --notes` remains pending because a runnable local upstream checkout is not available in this sandbox; this is not reported as a PASS.
+- Physical Gold / Red / Blue / Yellow and real cross-mod testing remain intentionally batched for the later live matrix before stable v1.1.0.
+
+## 1.1.0-rc.4
+
+### Fixed
+- Reworked Professor Elm again after live rc.3 testing still produced no supplemental appraisal menu.
+- Removed runtime equality with the dynamically resolved Elm `scriptKey` as an activation requirement.
+- Elm conversations are now armed by observing his native `faceplayer` command in `ELMS_LAB`; the command is delegated unchanged and cannot open appraisal UI itself.
+- The supplemental **APPRAISE / CANCEL** menu is still created only after successful `script.ended` for the same observed VM run.
+- Map matching accepts either `ELMS_LAB` or cartridge group 24 / map 5.
+
+### Story / false-positive safety
+- Vanilla Elm commands retain absolute priority: no Elm text, branch, item reward, flag write or return value is replaced or short-circuited.
+- New-script, aborted-run and mismatched-run paths clear Elm bookkeeping before it can leak.
+- A bare `script.ended` no longer qualifies. This guards against Gold's intentionally stale `hLastTalked` value on signs/callbacks.
+- Pre-starter empty-party suppression and Egg opacity remain unchanged.
+
+### Validation status
+- Gen I regression suite: PASS.
+- Gold headless suite: PASS, including deliberately mismatched Elm `scriptKey`, friendly-map-id-only and group/number-only contexts, same-VM binding, pass-through ordering, stale-context suppression and aborted-run suppression.
+- Physical Gold live test remains required before stable v1.1.0.
+
+## 1.1.0-rc.3
+
+### Fixed
+- Rebuilt Professor Elm integration after live testing showed the rc.2 idle-terminal command hook did not surface the appraisal menu.
+- Elm appraisal is now an artificial **post-dialogue** menu driven by Gold's `script.ended` lifecycle event.
+- Removed all Elm-specific `script.command` interception and imported idle-branch detection.
+- Prevented Elm appraisal completion from falling into the Oak-PC `Closed link to PROF.OAK's PC.` copy.
+
+### Priority / story safety
+- Every native `ProfElmScript` conversation has absolute priority and must complete successfully before the mod can show **APPRAISE / CANCEL**.
+- This applies to ordinary dialogue and to Mystery Egg, Togepi/Everstone, Master Ball, S.S. Ticket and other story/reward branches: the mod appears only after their native text and side effects have finished.
+- Pre-starter Elm remains untouched because an empty party suppresses the post-dialogue menu.
+- Exact provenance still requires Gold generation, `ELMS_LAB` group 24 / map 5 / object 1 and the dynamically resolved root Elm script. Aborted runs do not trigger appraisal.
+
+### Validation status
+- Gen I regression suite: PASS.
+- Gold headless suite: PASS, including command pass-through, post-dialogue ordering, pre-starter suppression, exact provenance, cancellation, Egg handling and no Oak-PC close-text leak.
+- Physical Gold live test of Elm remains required before stable v1.1.0.
+
+## 1.1.0-rc.2
+
+### Added
+- Added Professor Elm appraisal in Pokémon Gold.
+- The first safe Elm appraisal opportunity is the ordinary repeat conversation immediately after receiving the starter.
+- Added **APPRAISE / CANCEL** after Elm's vanilla safe repeat/idle dialogue.
+- Added headless coverage for Elm provenance, immediate post-starter appraisal, party cancellation, Egg refusal, later safe repeat branches, and negative story-branch isolation.
+
+### Safety / compatibility
+- Elm's one-shot story and reward branches remain untouched: Mystery Egg hand-off, stolen-Pokémon follow-up, aide/Egg reminder, Togepi/Everstone, Master Ball and S.S. Ticket flows are not decorated.
+- Safe Elm branches are discovered from the imported `ProfElmScript` control-flow graph, not hardcoded ROM pointers or English dialogue text.
+- Because Gold's VM memoizes the root `scriptKey` for the whole run, the mod keys the exact imported terminal command tables of approved idle branches while also requiring `ELMS_LAB` group 24 / map 5 / object 1 and the resolved root `ProfElmScript`.
+- Red / Blue / Yellow behavior and the existing Gold Oak PC / Happiness Rater flows are unchanged.
+
+### Validation status
+- Gen I regression suite: PASS.
+- Gold headless suite including Elm flows: PASS.
+- Current upstream `dev` rechecked at `01aab1d763c2e2d6878a0a25d606c02b3f569818`.
+- Physical Gold live / cross-mod matrix: NEEDS LIVE TEST before stable v1.1.0.
+
+## 1.1.0-rc.1
+
+### Added
+- Added Pokémon Gold support as a live-test release candidate.
+- Added Gold appraisal through the native **PROF.OAK's PC** context.
+- Added in-person appraisal through Goldenrod's Happiness Rater with **CHECK HAPPINESS / APPRAISE / CANCEL**.
+- Added Egg-safe appraisal refusal and reprompting without species/DV leakage.
+- Added Gold headless tests for scoring, PC progression boundaries, native delegation, party selection, Egg handling, Happiness Rater provenance and VM resume behavior.
+- Added read-only Gold diagnostics and Gold-specific effective Stat Experience exports.
+
+### Compatibility
+- Red / Blue / Yellow appraisal behavior, copy, tiers, layout and fresh-press semantics remain unchanged from v1.0.2.
+- Gold uses four stored DVs and five Stat Experience buckets; HP DV is derived and Special DV/Stat Experience are counted once.
+- Gold training appraisal follows the current Gold `Mon.lua` `floor(sqrt(statExp) / 4)` contribution. Gen I intentionally retains v1.0.2's ceil-sqrt behavior.
+- Gold Oak PC integration decorates only an existing native `oaks` row and never manufactures it before the Pokédex.
+- Bill's PC, Player's PC, Hall of Fame and Professor Elm are untouched.
+- No engine-version allow-list was added; `experimental` remains false.
+
+### Validation status
+- Gen I regression suite: PASS.
+- Gold headless suite: PASS.
+- Official `tools/modkit.py gen2check`: BLOCKED in the build sandbox because the upstream tool checkout is unavailable locally; static MK400–MK410 review performed instead.
+- Physical Gold live / cross-mod matrix: NEEDS LIVE TEST before stable v1.1.0.
+
+## 1.0.2
+
+- Removed the `game_version` manifest pin so Gen1Recomp updates no longer disable the mod solely because the engine version changed.
+- Future engine releases are treated as best-effort compatible until an actual incompatibility is observed.
+- Explicitly marks the mod as non-experimental.
+
+
 ## 1.0.1
 
 - Added native Gen1Recomp GitHub release update metadata.
