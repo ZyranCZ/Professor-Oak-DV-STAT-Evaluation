@@ -1,15 +1,16 @@
-# Compatibility — v2.0.0
+# Compatibility — v2.0.1
 
 ## Supported game targets
 
 - Red / Blue / Yellow (`gen1`)
 - Pokémon Gold (`gold`)
 
-Silver and Crystal are **not** declared. Gold support does not imply generic `gen2` support.
+Silver and Crystal are **not** declared. Gold support does not imply automatic support for a future Gen 2 game target.
 
 ## Engine / Mod API
 
 - Mod API: 2
+- Audited target: Gen1Recomp v0.1.86 (`3de45b671cada26835639c9bb3623201fefedfc3`)
 - `game_version`: intentionally absent
 - `experimental`: false
 - `engine_internals`: not requested
@@ -26,7 +27,7 @@ Gen I installs only:
 - `ui.pc.items` for **PROF.OAK's PC**
 - the existing `dex_rating` command interception for Oak's Lab, restricted to `OAKS_LAB`
 
-Gold boot does not access the Gen I `dex_rating` registry.
+Gold performs one read-only `dex_rating` capability probe during the entry chunk. Gold's command registry intentionally has no Gen I built-in verbs, so the probe returns `nil`; no `dex_rating` override or Gen I PC hook is installed.
 
 ## Gold Oak PC
 
@@ -47,7 +48,7 @@ Consequences:
 
 Professor Elm uses an observation-only, post-dialogue integration. **No Elm command is replaced or short-circuited.**
 
-RC.2 and RC.3 proved that making Elm appraisal depend on an assumed imported/root `scriptKey` was too brittle in live Gold. The stable v2.0.0 design therefore does not use `scriptKey` equality as an activation requirement.
+RC.2 and RC.3 proved that making Elm appraisal depend on an assumed imported/root `scriptKey` was too brittle in live Gold. The v2.0.1 design therefore does not use `scriptKey` equality as an activation requirement.
 
 The live sequence is:
 

@@ -16,7 +16,7 @@ return {
       "fresh-press protected appraisal dialogue in both supported generations",
     },
     known = {
-      "v2.0.0 appraises party Pokemon only; boxed Pokemon are not directly selectable",
+      "v2.0.1 appraises party Pokemon only; boxed Pokemon are not directly selectable",
     },
   },
   credits = {

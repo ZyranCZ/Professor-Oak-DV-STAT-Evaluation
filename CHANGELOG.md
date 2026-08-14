@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.1
+
+### Gen1Recomp v0.1.86 migration
+- Validated the complete mod against the exact Gen1Recomp `v0.1.86` source and Mod API 2 loader/sandbox contracts.
+- Retained the version-specific `gold` target so future Gen 2 games are not claimed without testing; v0.1.86's loader and `gen2check` both resolve that token correctly when run with LuaJIT.
+- Re-verified every runtime seam used by the mod: `game.ready`, `screen.pushed`, `script.started`, `script.ended`, `script.command`, `ui.pc.items`, `dex_rating`, `Gen2CenterPcMenu`, and `Gen2PartyMenu`.
+- Moved the Gen I `dex_rating` content override from `game.ready` into the entry phase; v0.1.86 freezes content registries before `game.ready`, so the former late write could leave Oak's in-person laboratory appraisal inactive despite a nominally loaded mod.
+- Kept Red / Blue / Yellow and Gold appraisal behavior, scoring, text, settings-free operation, exports, and read-only guarantees unchanged.
+- Corrected `.modkitignore` to name the test files explicitly, matching v0.1.86's exact-path packaging rules so tests are not shipped in the user-facing archive.
+- Added an official SDK-loader regression that asserts `run.mod.state == "loaded"` on both generation gates and exercises real v0.1.86 event/hook buses.
+- Retained `experimental: false`, no permissions, and no `game_version` pin.
+
 ## 2.0.0
 
 ### Stable Gen 2 release

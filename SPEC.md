@@ -2,6 +2,8 @@
 
 Target: Gen1Recomp Mod API 2. No engine-version pin is declared; newer engine releases are allowed to attempt loading the mod.
 
+Migration target: Gen1Recomp v0.1.86. The manifest declares `gen1` + the version-specific `gold` target.
+
 ## Entry flow
 
 1. Use a normal Pokemon Center PC.
@@ -103,7 +105,7 @@ The 100% tier is based on effective stat contribution, not the raw 16-bit counte
 
 ---
 
-# Gold / Gen 2 port addendum — v2.0.0
+# Gold / Gen 2 port addendum — v2.0.1
 
 ## Invariants
 

@@ -1,6 +1,6 @@
 # Professor Oak's Pokemon Appraisal
 
-**v2.0.0** for **Gen1Recomp Mod API 2**.
+**v2.0.1** for **Gen1Recomp Mod API 2**, migrated and validated against the exact **Gen1Recomp v0.1.86** source.
 
 This stable release adds **Pokémon Gold** support while preserving the existing Red / Blue / Yellow appraisal behavior. The mod intentionally has no `game_version` pin and remains `experimental: false`; engine versions are not allow-listed.
 
@@ -43,7 +43,7 @@ The mod does not create Oak's PC entry itself. It becomes available naturally wh
 - This is available on the first manual conversation with Elm after receiving the starter because the player then has a party Pokémon.
 - Mystery Egg, stolen-Pokémon, Togepi/Everstone, Master Ball, S.S. Ticket and later Elm dialogue therefore keep absolute priority; appraisal is merely appended after whichever vanilla conversation just completed.
 
-v2.0.0 deliberately does **not** require Elm's imported `scriptKey` to equal the runtime root key. Elm is identified by Gold + `ELMS_LAB` + Elm's NPC object (with the resolved root key only as a fallback when object context is missing) and, critically, by observing his native `faceplayer` command. `script.ended` by itself is insufficient, preventing stale `hLastTalked` from making a sign or bookshelf look like Elm. Before the starter, an empty party suppresses the supplemental menu.
+v2.0.1 deliberately does **not** require Elm's imported `scriptKey` to equal the runtime root key. Elm is identified by Gold + `ELMS_LAB` + Elm's NPC object (with the resolved root key only as a fallback when object context is missing) and, critically, by observing his native `faceplayer` command. `script.ended` by itself is insufficient, preventing stale `hLastTalked` from making a sign or bookshelf look like Elm. Before the starter, an empty party suppresses the supplemental menu.
 
 **Eggs cannot be appraised before they hatch.** Selecting an Egg gives a short refusal without revealing the hidden species, DVs or training data and returns to the party picker.
 
@@ -118,7 +118,7 @@ The actual verdict copy remains the v1.0.2 copy. Appraisal layout keeps the 18-c
 
 ## Compatibility design
 
-- Red / Blue / Yellow keep the existing `ui.pc.items` and Oak Lab `dex_rating` integration, installed only on Gen I.
+- Red / Blue / Yellow keep the existing `ui.pc.items` and Oak Lab `dex_rating` integration, committed during the entry phase before v0.1.86 freezes content. Gold's read-only capability probe returns no `dex_rating`, so that backend is not installed there.
 - Gold's top-level Center PC is handled only through the native `Gen2CenterPcMenu` instance; the mod never inserts appraisal into Bill's storage PC or the player's item PC.
 - Gold's **SHOW POKéDEX** delegates to the captured native Oak PC behavior.
 - Goldenrod appraisal is restricted by generation, map id, map group/number, teacher object id, dynamically resolved exact `scriptKey`, and `GetFirstPokemonHappiness` special identity.
@@ -133,6 +133,6 @@ Appraisal is for **party Pokémon only**. Direct boxed-Pokémon selection remain
 
 ## Release validation
 
-Automated Gen I regression and expanded Gold headless suites pass. The Elm runtime mechanism proven through RC.4/RC.5 is promoted unchanged: Elm's complete native conversation always runs before the supplemental appraisal menu. Coverage includes mismatched runtime `scriptKey`, map-id/group-number fallback, vanilla-command pass-through, post-dialogue priority, pre-starter suppression, stale-context suppression and aborted-run suppression.
+Automated Gen I regression and expanded Gold headless suites pass. The v0.1.86 SDK loader additionally confirms that the mod reaches `loaded` state on both generation gates and that the real event/hook buses activate the intended backend. The Elm runtime mechanism proven through RC.4/RC.5 is preserved: Elm's complete native conversation always runs before the supplemental appraisal menu. Coverage includes mismatched runtime `scriptKey`, map-id/group-number fallback, vanilla-command pass-through, post-dialogue priority, pre-starter suppression, stale-context suppression and aborted-run suppression.
 
-RC.5 was also exercised in live Gold and reported to behave correctly, so it is promoted to stable **v2.0.0**. The broader scripted cross-mod matrix remains useful as future compatibility smoke testing, but is no longer a release blocker.
+The v2.0.0 runtime lineage was exercised in live Gold and reported to behave correctly. v2.0.1 preserves that behavior while migrating its package and validation contract to v0.1.86. The broader scripted cross-mod matrix remains useful as future compatibility smoke testing.

@@ -1,12 +1,12 @@
--- PROFESSOR OAK'S POKEMON APPRAISAL v2.0.0
--- Target: Gen1Recomp Mod API 2; no engine-version pin
+-- PROFESSOR OAK'S POKEMON APPRAISAL v2.0.1
+-- Target validated against Gen1Recomp v0.1.86 / Mod API 2; no version pin
 --
 -- Preserves the Red/Blue/Yellow Oak appraisal flow and adds Pokémon Gold routes
 -- through native PROF.OAK's PC, Goldenrod's Happiness Rater, and a post-dialogue
 -- Professor Elm supplement. Appraisal is read-only and scores stored DVs plus
 -- battle-grown Stat Experience with generation-correct arithmetic.
 
-local MOD_VERSION = "2.0.0"
+local MOD_VERSION = "2.0.1"
 local MAX_DV_SUM = 60
 local MAX_EFFECTIVE_STAT_EXP_PER_STAT = 63
 local STAT_EXP_KEYS = { "hp", "attack", "defense", "speed", "special" }
@@ -20,7 +20,7 @@ local function clampNumber(value, lo, hi)
   return value
 end
 
--- Mirrors Gen1Recomp v0.1.75 Stats.calc's Stat Experience contribution:
+-- Mirrors Gen1Recomp v0.1.86 Stats.calc's Stat Experience contribution:
 -- floor(min(255, ceil(sqrt(statExp))) / 4), i.e. 0..63 per stat.
 -- This measures effective training potential rather than raw 0..65535 storage.
 local function effectiveStatExp(statExp)
@@ -1068,15 +1068,23 @@ return function(mod)
     end, 100)
   end
 
-  -- game.ready is emitted after all mod-facing services and generation data
-  -- are available, both on normal boot and after dev hot reload.
+  -- Content registries are frozen before game.ready on v0.1.86.  The Gen I
+  -- backend owns the dex_rating command override, so it must be installed
+  -- during the entry chunk.  Capability detection keeps Gold isolated: its
+  -- command registry intentionally contains no Gen I built-in verbs.
+  local entryCommands = mod.content and mod.content.commands
+  if entryCommands and type(entryCommands:get("dex_rating")) == "function" then
+    installGen1()
+  end
+
+  -- Gold needs the live Game2 owner and generated map/script tables.  Those
+  -- are available in game.ready; Gold registers only runtime hooks/events at
+  -- that point, which remain legal for the life of the process.
   mod.events:on("game.ready", function(ev)
     local game = ev and ev.game
     if not game then return end
     if isGoldGame(game) then
       installGold(game)
-    else
-      installGen1()
     end
   end)
 
